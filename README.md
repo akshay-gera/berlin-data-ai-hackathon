@@ -21,6 +21,7 @@ This repo is designed to work with **AI coding assistants** — particularly [Cl
 - **`CLAUDE.md`** — project context, data architecture, SQL patterns, and query conventions that Claude Code loads automatically
 - **Lightdash skill** (`.claude/skills/developing-in-lightdash/`) — generates Lightdash explores, charts, and dashboards from plain-language descriptions
 - **dbt skills** (`.claude/skills/`) — builds dbt models, runs commands, writes tests, and answers data questions — sourced from [dbt-labs/dbt-agent-skills](https://github.com/dbt-labs/dbt-agent-skills)
+- **Collate MCP server** — connect your AI tools to the data catalog to search metadata, look up column descriptions, and create glossary terms. See [platforms/collate/](platforms/collate/) for setup
 
 **How to use:** Open the repo in Claude Code (or an IDE with Claude Code integration) and start asking questions. The AI assistant understands the data schema, knows the SQL patterns for this dataset, and can generate dbt models and Lightdash dashboards for you. Describe what you want to analyse, and it will write the queries and configurations.
 
@@ -36,7 +37,7 @@ You don't need to learn the full syntax of every tool — the AI skills handle t
 
 **[Lightdash](https://www.lightdash.com/)** — Open-source BI tool connected to your Snowflake data. Build dashboards and visualisations for your analysis and final presentation.
 
-**[Collate](https://www.getcollate.io/)** — Data catalog platform. Explore metadata, table relationships, and document your work.
+**[Collate](https://www.getcollate.io/)** — Data catalog and governance platform (powered by OpenMetadata). Browse table schemas, column descriptions, data profiles, and sample data. Document your findings, build a shared glossary, and set up data quality tests. Includes a Chrome extension for metadata inside Snowflake, an AI assistant (AskCollate), and an MCP server for AI coding tools.
 
 ---
 
@@ -50,7 +51,7 @@ How to connect to and use each platform.
 | -------- | ----- |
 | [platforms/snowflake/](platforms/snowflake/) | Snowflake — credentials, warehouses, CLI setup |
 | [platforms/lightdash/](platforms/lightdash/) | Lightdash — BI dashboards, AI-assisted development, CLI |
-| [platforms/collate/](platforms/collate/) | Collate — data catalog |
+| [platforms/collate/](platforms/collate/) | Collate — data catalog, schema exploration, profiler, Chrome extension, AskCollate AI, MCP server |
 | [platforms/dbt/](platforms/dbt/) | dbt — data transformations, bootstrap project, AI skills |
 
 ### Data
