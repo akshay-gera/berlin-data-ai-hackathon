@@ -1,0 +1,391 @@
+version: 2
+
+models:
+  - name: mart_user_features
+    description: >
+      One row per user. All behavioural signals from mart_events_wide rolled up
+      to user level. Use this table to understand the user base, define audience
+      segments (Challenge 5), and identify which user types have the highest
+      purchase intent. Covers Germany, December 2025.
+    meta:
+      label: "User Features"
+      group_label: "Segmentation"
+      primary_key: user_id
+      order_fields_by: "index"
+      ai_hint:
+        - "This is the user-level feature table. Each row represents one anonymous JustWatch user and summarises all their behaviour during December 2025 in Germany."
+        - "Use this table to segment users. Key segmentation signals: clickout_rate (purchase intent), movie_share (movie vs show preference), avg_events_per_session (engagement depth), watchlist_adds (curation behaviour), top_genre (content taste), primary_device (device type)."
+        - "Suggested segments to explore: 'Power browsers' (high total_events, low clickout_rate), 'Deal hunters' (high clickouts_rent + clickouts_buy), 'Binge watchers' (high show_events, high avg_events_per_session), 'Curators' (high watchlist_adds + likelist_adds), 'Casual visitors' (low days_active, low total_sessions)."
+        - "clickout_rate is the fraction of all events that were clickouts. It is a direct signal of purchase intent. High clickout_rate users are the most commercially valuable."
+        - "movie_share near 1.0 = this user almost exclusively watches movies. Near 0.0 = show-first user."
+        - "is_logged_in_user = 1 means the user has a JustWatch account. These users tend to be more engaged and have richer profiles."
+        - "top_genre, top_provider, and primary_device are the most frequent values for that user across their entire history."
+      spotlight:
+        visibility: "show"
+        categories:
+          - "Segmentation"
+          - "User Analysis"
+      group_details:
+        identity:
+          label: "Identity & Preferences"
+        volume:
+          label: "Volume"
+        clickouts:
+          label: "Purchase Intent (Clickouts)"
+        engagement:
+          label: "Engagement"
+        curation:
+          label: "Curation Behaviour"
+        recency:
+          label: "Recency"
+
+    columns:
+
+      # ── Identity & Preferences ───────────────────────────────────────────────
+      - name: user_id
+        description: "Anonymous device/browser user ID. Primary key of this table. One row per user."
+        meta:
+          dimension:
+            type: string
+            label: "User ID"
+            groups: ["identity"]
+            ai_hint: "Primary key — one row per user. Use count_distinct(user_id) or the 'Total Users' metric to count the user base."
+          metrics:
+            total_users:
+              type: count_distinct
+              label: "Total Users"
+              description: "Number of distinct anonymous users in the dataset"
+
+      - name: is_logged_in_user
+        description: "1 if the user was logged into their JustWatch account during at least one event in the period. 0 otherwise."
+        meta:
+          dimension:
+            type: boolean
+            label: "Has Account"
+            groups: ["identity"]
+            ai_hint: "Logged-in users are more engaged and represent the core JustWatch user base. About 14% of events come from logged-in users."
+          metrics:
+            pct_logged_in:
+              type: average
+              label: "% Users With Account"
+              description: "Share of users who were logged in at least once"
+              format: "percent"
+              round: 1
+
+      - name: primary_locale
+        description: "The app locale this user used most frequently (e.g. 'de_DE', 'en_US'). Reflects the market they browse in."
+        meta:
+          dimension:
+            type: string
+            label: "Primary Locale"
+            groups: ["identity"]
+
+      - name: primary_device
+        description: "Device class this user used most frequently: 'Desktop', 'Phone', or 'Tablet'."
+        meta:
+          dimension:
+            type: string
+            label: "Primary Device"
+            groups: ["identity"]
+            ai_hint: "Use this to split segments by device type. Mobile users tend to browse differently from desktop users."
+
+      - name: top_genre
+        description: "Genre the user interacted with most frequently across all their content events."
+        meta:
+          dimension:
+            type: string
+            label: "Top Genre"
+            groups: ["identity"]
+            ai_hint: "The user's dominant content taste by genre. Use this to identify genre loyalists (e.g. 'Action' fans, 'Drama' fans)."
+
+      - name: top_provider
+        description: "Streaming provider the user clicked out to most often. NULL if the user never clicked out."
+        meta:
+          dimension:
+            type: string
+            label: "Top Provider"
+            groups: ["identity"]
+            ai_hint: "The streaming service this user most often showed intent to subscribe to or use. NULL means they browsed but never clicked to a provider."
+
+      # ── Volume ────────────────────────────────────────────────────────────────
+      - name: total_events
+        description: "Total number of events this user generated in the period (all types including page views and structured events)."
+        meta:
+          dimension:
+            type: number
+            label: "Total Events"
+            groups: ["volume"]
+            ai_hint: "Overall activity level. Power users will have hundreds or thousands. Casual visitors might have under 10."
+          metrics:
+            avg_events_per_user:
+              type: average
+              label: "Avg Events per User"
+              round: 1
+            sum_events:
+              type: sum
+              label: "Total Events (Sum)"
+
+      - name: total_sessions
+        description: "Total number of sessions this user had. One session = continuous activity with less than 30 minutes of inactivity."
+        meta:
+          dimension:
+            type: number
+            label: "Total Sessions"
+            groups: ["volume"]
+          metrics:
+            avg_sessions_per_user:
+              type: average
+              label: "Avg Sessions per User"
+              round: 1
+
+      - name: days_active
+        description: "Number of distinct calendar days this user had at least one event. Max possible is 31 (all of December)."
+        meta:
+          dimension:
+            type: number
+            label: "Days Active"
+            groups: ["volume"]
+            ai_hint: "Frequency signal. 1–2 days = one-off visitor. 10+ days = regular user. 25+ days = highly loyal/habitual user."
+          metrics:
+            avg_days_active:
+              type: average
+              label: "Avg Days Active"
+              round: 1
+
+      - name: total_page_views
+        description: "Total page view events for this user. Page views have event = 'page_view'."
+        meta:
+          dimension:
+            type: number
+            label: "Page Views"
+            groups: ["volume"]
+
+      # ── Purchase Intent (Clickouts) ──────────────────────────────────────────
+      - name: total_clickouts
+        description: "Total number of clickout events across all monetization types. A clickout means the user clicked to go to a streaming provider — the strongest purchase intent signal in the data."
+        meta:
+          dimension:
+            type: number
+            label: "Total Clickouts"
+            groups: ["clickouts"]
+            ai_hint: "The primary commercial signal. Users with many clickouts are actively shopping for streaming content. Combine with se_action breakdown (rent/buy vs flatrate) to understand monetization intent."
+          metrics:
+            avg_clickouts_per_user:
+              type: average
+              label: "Avg Clickouts per User"
+              round: 2
+            sum_clickouts:
+              type: sum
+              label: "Total Clickouts (Sum)"
+
+      - name: clickout_rate
+        description: >
+          Fraction of all events that were clickouts (total_clickouts / total_events).
+          Values range 0.0–1.0. High values indicate a user who browses with strong
+          commercial intent. Low values indicate a casual browser.
+        meta:
+          dimension:
+            type: number
+            label: "Clickout Rate"
+            format: "percent"
+            round: 2
+            groups: ["clickouts"]
+            ai_hint: "The single most important segmentation signal for purchase intent. A user with clickout_rate > 0.05 is a high-intent user. Most users will be below 0.02."
+          metrics:
+            avg_clickout_rate:
+              type: average
+              label: "Avg Clickout Rate"
+              format: "percent"
+              round: 2
+
+      - name: clickouts_flatrate
+        description: "Clickouts specifically to subscription-based offers (flatrate). Examples: Netflix, Disney+, Amazon Prime. The user is signalling intent to subscribe or use an existing subscription."
+        meta:
+          dimension:
+            type: number
+            label: "Subscription Clickouts"
+            groups: ["clickouts"]
+          metrics:
+            avg_flatrate_clickouts:
+              type: average
+              label: "Avg Subscription Clickouts"
+              round: 2
+
+      - name: clickouts_free
+        description: "Clickouts to free streaming offers (no payment required, typically ad-supported)."
+        meta:
+          dimension:
+            type: number
+            label: "Free AVOD Clickouts"
+            groups: ["clickouts"]
+
+      - name: clickouts_ads
+        description: "Clickouts to ad-supported streaming offers (AVOD). Similar to 'free' but for platforms with mandatory ad viewing."
+        meta:
+          dimension:
+            type: number
+            label: "Ad-supported Clickouts"
+            groups: ["clickouts"]
+
+      - name: clickouts_rent
+        description: "Clickouts to rental offers (TVOD — transactional). User is signalling willingness to pay per title."
+        meta:
+          dimension:
+            type: number
+            label: "Rental Clickouts"
+            groups: ["clickouts"]
+            ai_hint: "Users with high rental clickouts are 'transactional' — they prefer to pay per title rather than subscribe. A distinct and commercially valuable segment."
+          metrics:
+            avg_rent_clickouts:
+              type: average
+              label: "Avg Rental Clickouts"
+              round: 2
+
+      - name: clickouts_buy
+        description: "Clickouts to purchase/buy offers (TVOD). User is signalling willingness to own the title permanently."
+        meta:
+          dimension:
+            type: number
+            label: "Purchase Clickouts"
+            groups: ["clickouts"]
+
+      # ── Engagement ────────────────────────────────────────────────────────────
+      - name: avg_events_per_session
+        description: "Average number of events per session. A proxy for session depth and engagement intensity. High values mean the user browses deeply within each visit."
+        meta:
+          dimension:
+            type: number
+            label: "Avg Session Depth"
+            round: 1
+            groups: ["engagement"]
+            ai_hint: "High session depth (>20 events per session) = power browser who explores many titles per visit. Low depth (<5) = quick lookup behaviour."
+          metrics:
+            avg_session_depth:
+              type: average
+              label: "Avg Session Depth"
+              round: 1
+
+      - name: unique_titles_viewed
+        description: "Number of distinct content titles this user had any event associated with. Measures breadth of content exploration."
+        meta:
+          dimension:
+            type: number
+            label: "Unique Titles Viewed"
+            groups: ["engagement"]
+            ai_hint: "High values indicate explorers who browse many different titles. Low values with high clickouts may indicate a user who knows exactly what they want."
+          metrics:
+            avg_titles_per_user:
+              type: average
+              label: "Avg Titles per User"
+              round: 1
+
+      - name: movie_events
+        description: "Number of events on movie content. Use with show_events to understand content type preference."
+        meta:
+          dimension:
+            type: number
+            label: "Movie Events"
+            groups: ["engagement"]
+
+      - name: show_events
+        description: "Number of events on show/series content (show, season, or episode level)."
+        meta:
+          dimension:
+            type: number
+            label: "Show Events"
+            groups: ["engagement"]
+
+      - name: movie_share
+        description: >
+          Fraction of content-related events that involve movies (vs shows).
+          1.0 = exclusively movie-focused user. 0.0 = exclusively show-focused user.
+          NULL if the user had no content events.
+        meta:
+          dimension:
+            type: number
+            label: "Movie Share"
+            format: "percent"
+            round: 2
+            groups: ["engagement"]
+            ai_hint: "Key content preference signal. Movie-first users (movie_share > 0.7) and show-first users (movie_share < 0.3) behave very differently. Shows drive deeper long-term engagement."
+          metrics:
+            avg_movie_share:
+              type: average
+              label: "Avg Movie Share"
+              format: "percent"
+              round: 2
+
+      - name: search_events
+        description: "Number of search events (user typed something into the JustWatch search bar). High values indicate intent-driven, title-specific browsing."
+        meta:
+          dimension:
+            type: number
+            label: "Search Events"
+            groups: ["engagement"]
+            ai_hint: "Users with many search events know what they're looking for — they have specific titles in mind. Contrast with users who browse via homepage or genre pages."
+
+      - name: trailer_plays
+        description: "Number of YouTube trailer play events. Indicates deeper interest in a title before committing to a clickout."
+        meta:
+          dimension:
+            type: number
+            label: "Trailer Plays"
+            groups: ["engagement"]
+
+      # ── Curation Behaviour ───────────────────────────────────────────────────
+      - name: watchlist_adds
+        description: "Number of times this user added a title to their watchlist. Strong intent signal — the user wants to track this title."
+        meta:
+          dimension:
+            type: number
+            label: "Watchlist Adds"
+            groups: ["curation"]
+            ai_hint: "Watchlist adds signal deferred intent — the user is interested but not ready to click out yet. Users with many watchlist adds are engaged but may be waiting for a better offer or availability."
+          metrics:
+            avg_watchlist_adds:
+              type: average
+              label: "Avg Watchlist Adds"
+              round: 1
+
+      - name: seenlist_adds
+        description: "Number of times this user marked a title as seen. Indicates an active tracker who records what they've watched."
+        meta:
+          dimension:
+            type: number
+            label: "Seenlist Adds"
+            groups: ["curation"]
+
+      - name: likelist_adds
+        description: "Number of times this user explicitly liked a title. Positive sentiment signal."
+        meta:
+          dimension:
+            type: number
+            label: "Likes"
+            groups: ["curation"]
+
+      - name: dislikelist_adds
+        description: "Number of times this user explicitly disliked a title. Negative preference signal."
+        meta:
+          dimension:
+            type: number
+            label: "Dislikes"
+            groups: ["curation"]
+
+      # ── Recency ──────────────────────────────────────────────────────────────
+      - name: last_active_date
+        description: "Most recent calendar date this user had any event. Indicates recency within the December 2025 period."
+        meta:
+          dimension:
+            type: date
+            label: "Last Active Date"
+            time_intervals: ["DAY", "WEEK", "MONTH"]
+            groups: ["recency"]
+
+      - name: first_active_date
+        description: "Earliest calendar date this user had any event in the dataset."
+        meta:
+          dimension:
+            type: date
+            label: "First Active Date"
+            time_intervals: ["DAY", "WEEK", "MONTH"]
+            groups: ["recency"]

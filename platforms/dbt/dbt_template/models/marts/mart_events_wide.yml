@@ -1,0 +1,464 @@
+version: 2
+
+models:
+  - name: mart_events_wide
+    description: >
+      One row per deduplicated event from T1 (Germany, December 2025).
+      Bots filtered. Enriched with content metadata from OBJECTS and provider
+      names from PACKAGES. Use this table to explore raw behaviour: which titles
+      are trending, what events look like, provider clickout patterns.
+    meta:
+      label: "Events (Wide)"
+      group_label: "Explore"
+      primary_key: rid
+      order_fields_by: "index"
+      default_time_dimension:
+        field: event_date
+        interval: DAY
+      ai_hint:
+        - "This is the main event log table. Each row is one user action on JustWatch — a page view, a click on a title, a clickout to a streaming provider, a watchlist add, etc."
+        - "The dataset covers Germany (geo_country = 'DE') for December 2025. It has ~9.2M rows after bot filtering."
+        - "A 'clickout' (se_category = 'clickout') means the user clicked to go to a streaming provider like Netflix or Amazon. The se_action tells you the monetization type: flatrate (subscription), free, ads, rent, buy."
+        - "content_id links to the JustWatch title. content_title is the human-readable name. primary_genre is the first genre tag."
+        - "provider_name is the streaming service (Netflix, Disney+, etc.). It is only populated on clickout events."
+        - "user_id is anonymous. login_id is only present (~14% of events) when the user is logged into their JustWatch account."
+        - "To count events use count(rid). To count users use count_distinct(user_id). To count clickouts filter se_category = 'clickout'."
+        - "Bot traffic has already been removed. No need to filter device_class."
+      spotlight:
+        visibility: "show"
+        categories:
+          - "Explore"
+          - "Raw Data"
+      group_details:
+        identity:
+          label: "Identity & Session"
+        time:
+          label: "Time"
+        event:
+          label: "Event"
+        location:
+          label: "Location"
+        device:
+          label: "Device & Platform"
+        content:
+          label: "Content"
+        provider:
+          label: "Provider"
+
+    columns:
+
+      # ── Identity & Session ───────────────────────────────────────────────────
+      - name: rid
+        description: "Deduplication key. Use this to count distinct events — it is guaranteed unique unlike event_id."
+        meta:
+          dimension:
+            type: string
+            label: "Event ID (rid)"
+            hidden: true
+            groups: ["identity"]
+            ai_hint: "Use count(rid) to count total events. This is the deduplicated row identifier."
+          metrics:
+            count_events:
+              type: count
+              label: "Total Events"
+              description: "Total number of deduplicated events"
+            count_clickouts:
+              type: count
+              label: "Clickout Events"
+              description: "Events where the user clicked out to a streaming provider"
+              filters:
+                - se_category: "clickout"
+            count_page_views:
+              type: count
+              label: "Page Views"
+              filters:
+                - event: "page_view"
+
+      - name: user_id
+        description: "Anonymous device/browser ID assigned by JustWatch. Persistent across sessions on the same device. Not linked to any personal data."
+        meta:
+          dimension:
+            type: string
+            label: "User ID"
+            groups: ["identity"]
+            ai_hint: "Anonymous identifier for a device/browser. Use count_distinct(user_id) to count unique users."
+          metrics:
+            unique_users:
+              type: count_distinct
+              label: "Unique Users"
+              description: "Number of distinct anonymous users"
+
+      - name: login_id
+        description: "JustWatch account login ID. Present only when the user is logged in (~14% of events). NULL otherwise."
+        meta:
+          dimension:
+            type: string
+            label: "Login ID"
+            groups: ["identity"]
+            ai_hint: "Only populated when the user has a JustWatch account and is logged in. About 14% of events have this."
+          metrics:
+            logged_in_users:
+              type: count_distinct
+              label: "Logged-in Users"
+              description: "Unique users who were logged in during at least one event"
+
+      - name: session_id
+        description: "Session ID. One session = continuous activity with less than 30 minutes of inactivity."
+        meta:
+          dimension:
+            type: string
+            label: "Session ID"
+            hidden: true
+            groups: ["identity"]
+          metrics:
+            unique_sessions:
+              type: count_distinct
+              label: "Unique Sessions"
+
+      - name: session_idx
+        description: "Session sequence number for this user. 1 = first ever session on this device."
+        meta:
+          dimension:
+            type: number
+            label: "Session Number"
+            groups: ["identity"]
+            ai_hint: "Low values (1, 2, 3) indicate new users. High values indicate returning, loyal users."
+
+      # ── Time ─────────────────────────────────────────────────────────────────
+      - name: collector_tstamp
+        description: "UTC timestamp when the Snowplow collector received the event. Primary timestamp for time-based analysis."
+        meta:
+          dimension:
+            type: timestamp
+            label: "Event Timestamp"
+            time_intervals: ["RAW", "HOUR", "DAY", "WEEK", "MONTH"]
+            groups: ["time"]
+
+      - name: derived_tstamp
+        description: "Corrected timestamp that accounts for client clock drift. More accurate for ordering events within a session."
+        meta:
+          dimension:
+            type: timestamp
+            label: "Event Timestamp (Corrected)"
+            time_intervals: ["RAW", "HOUR", "DAY", "WEEK", "MONTH"]
+            hidden: true
+            groups: ["time"]
+
+      - name: event_date
+        description: "Date of the event (derived from collector_tstamp). Use this for day-level time series."
+        meta:
+          dimension:
+            type: date
+            label: "Event Date"
+            time_intervals: ["DAY", "WEEK", "MONTH"]
+            groups: ["time"]
+
+      - name: event_hour
+        description: "Hour of day the event occurred (0–23 UTC). Use this to analyse intraday patterns."
+        meta:
+          dimension:
+            type: number
+            label: "Hour of Day"
+            groups: ["time"]
+            ai_hint: "Use this to find peak usage hours. Value is 0–23 in UTC."
+
+      # ── Event ─────────────────────────────────────────────────────────────────
+      - name: event
+        description: "Snowplow event type: 'struct' (~95% of events) or 'page_view' (~5%)."
+        meta:
+          dimension:
+            type: string
+            label: "Event Type"
+            groups: ["event"]
+
+      - name: se_category
+        description: >
+          Structured event category. Key values: 'clickout' (provider click),
+          'userinteraction' (title click), 'watchlist_add', 'seenlist_add',
+          'likelist_add', 'dislikelist_add', 'youtube_started' (trailer play),
+          'search_suggest_click'. NULL for page_view events.
+        meta:
+          dimension:
+            type: string
+            label: "Event Category"
+            groups: ["event"]
+            ai_hint: "The most important field for understanding what a user did. 'clickout' = purchase intent. 'watchlist_add' = strong interest. 'userinteraction' with action 'title_clicked' = browsing interest."
+
+      - name: se_action
+        description: >
+          Action within the event category. For 'clickout' events this is the
+          monetization type: flatrate (subscription), free, ads, rent, buy, cinema.
+          For 'userinteraction' the most common value is 'title_clicked'.
+        meta:
+          dimension:
+            type: string
+            label: "Event Action"
+            groups: ["event"]
+            ai_hint: "For clickouts, this tells you WHY the user clicked: flatrate=subscription, rent=rental, buy=purchase, free/ads=free tier. This is the monetization intent signal."
+
+      - name: se_label
+        description: "Additional label field. Meaning varies by se_category. E.g. for title interactions, this is the UI element clicked."
+        meta:
+          dimension:
+            type: string
+            label: "Event Label"
+            groups: ["event"]
+
+      - name: se_property
+        description: "Additional property field. Meaning varies by se_category."
+        meta:
+          dimension:
+            type: string
+            label: "Event Property"
+            groups: ["event"]
+
+      # ── Location ─────────────────────────────────────────────────────────────
+      - name: geo_country
+        description: "ISO 3166-1 alpha-2 country code derived from IP geolocation (e.g. 'DE'). This is the user's physical location — not their chosen market."
+        meta:
+          dimension:
+            type: string
+            label: "Country (IP)"
+            groups: ["location"]
+            ai_hint: "Physical location from IP. T1 is Germany-only so this is almost always 'DE'. Use locale for the market the user has chosen."
+
+      - name: geo_region_name
+        description: "Region or federal state from IP geolocation (e.g. 'Bavaria', 'Berlin')."
+        meta:
+          dimension:
+            type: string
+            label: "Region"
+            groups: ["location"]
+
+      - name: geo_city
+        description: "City from IP geolocation (e.g. 'Berlin', 'Munich'). May be null."
+        meta:
+          dimension:
+            type: string
+            label: "City"
+            groups: ["location"]
+
+      # ── Device & Platform ────────────────────────────────────────────────────
+      - name: locale
+        description: >
+          User's chosen app locale (e.g. 'de_DE', 'en_US'). This is the market
+          the user has selected in JustWatch — not their physical location.
+          A German expat in France would have locale='de_DE' and geo_country='FR'.
+        meta:
+          dimension:
+            type: string
+            label: "App Locale"
+            groups: ["device"]
+            ai_hint: "The market the user browsed in — their language/country setting in the JustWatch app. More meaningful than geo_country for understanding user intent."
+
+      - name: page_type
+        description: "Type of page where the event occurred (e.g. 'title_detail', 'home', 'search', 'genre', 'provider')."
+        meta:
+          dimension:
+            type: string
+            label: "Page Type"
+            groups: ["device"]
+            ai_hint: "Where on JustWatch the user was when the event happened. 'title_detail' = they were on a specific movie/show page."
+
+      - name: device_class
+        description: "Parsed device class from user agent: 'Desktop', 'Phone', or 'Tablet'. Bot traffic (Robot/Spy/Hacker) is already filtered from this table."
+        meta:
+          dimension:
+            type: string
+            label: "Device Type"
+            groups: ["device"]
+
+      - name: browser_name
+        description: "Browser name parsed from user agent (e.g. 'Chrome', 'Safari', 'Firefox')."
+        meta:
+          dimension:
+            type: string
+            label: "Browser"
+            groups: ["device"]
+
+      - name: app_id
+        description: "Application identifier: 'jw-web' (website), 'jw-android', 'jw-ios'."
+        meta:
+          dimension:
+            type: string
+            label: "App"
+            groups: ["device"]
+
+      - name: platform
+        description: "Platform code: 'web' (~90% of events) or 'mob' (~10%)."
+        meta:
+          dimension:
+            type: string
+            label: "Platform"
+            groups: ["device"]
+
+      # ── Content ──────────────────────────────────────────────────────────────
+      - name: content_id
+        description: "JustWatch entity ID of the content item (e.g. 'tm12345' for a movie, 'ts678' for a show). Links to OBJECTS.object_id."
+        meta:
+          dimension:
+            type: string
+            label: "Content ID"
+            hidden: true
+            groups: ["content"]
+            ai_hint: "Internal content identifier. Use content_title for human-readable name. NULL when the event has no content context (e.g. homepage visits)."
+          metrics:
+            unique_titles:
+              type: count_distinct
+              label: "Unique Titles"
+              description: "Number of distinct content items interacted with"
+
+      - name: content_type
+        description: "Content type from the event context: 'movie', 'show', 'season', or 'episode'. Note: cc_title:jwEntityId always points to the top-level title (movie or show) even for episode events."
+        meta:
+          dimension:
+            type: string
+            label: "Content Type"
+            groups: ["content"]
+            ai_hint: "Use this to separate movie behaviour from show behaviour — they have very different engagement patterns. Movies spike around release; shows build engagement over seasons."
+
+      - name: season_number
+        description: "Season number (populated only for season and episode-level events)."
+        meta:
+          dimension:
+            type: number
+            label: "Season Number"
+            groups: ["content"]
+
+      - name: episode_number
+        description: "Episode number within its season (populated only for episode-level events)."
+        meta:
+          dimension:
+            type: number
+            label: "Episode Number"
+            groups: ["content"]
+
+      - name: content_title
+        description: "English display title of the content item (from OBJECTS). NULL when the event has no content context (e.g. homepage, search page)."
+        meta:
+          dimension:
+            type: string
+            label: "Title"
+            groups: ["content"]
+            ai_hint: "The name of the movie or show the event is related to. NULL for non-content events like homepage visits."
+
+      - name: content_object_type
+        description: "Content object type from OBJECTS metadata. Slightly more reliable than content_type from the event context."
+        meta:
+          dimension:
+            type: string
+            label: "Object Type"
+            hidden: true
+            groups: ["content"]
+
+      - name: release_year
+        description: "Year the title was released. For shows — year of first episode."
+        meta:
+          dimension:
+            type: number
+            label: "Release Year"
+            groups: ["content"]
+
+      - name: runtime
+        description: "Runtime in minutes. For movies — total runtime. For shows — average episode runtime."
+        meta:
+          dimension:
+            type: number
+            label: "Runtime (mins)"
+            groups: ["content"]
+
+      - name: original_language
+        description: "ISO 639-1 language code of the original production (e.g. 'en', 'de', 'ko', 'fr')."
+        meta:
+          dimension:
+            type: string
+            label: "Original Language"
+            groups: ["content"]
+
+      - name: imdb_score
+        description: "IMDB user rating on a 0.0–10.0 scale. May be null for some titles."
+        meta:
+          dimension:
+            type: number
+            label: "IMDB Score"
+            round: 1
+            groups: ["content"]
+          metrics:
+            avg_imdb_score:
+              type: average
+              label: "Avg IMDB Score"
+              round: 2
+
+      - name: primary_genre
+        description: "First genre tag from TMDB (e.g. 'Drama', 'Action', 'Comedy', 'Thriller'). Derived from the genre_tmdb array on the OBJECTS table."
+        meta:
+          dimension:
+            type: string
+            label: "Genre"
+            groups: ["content"]
+            ai_hint: "The primary genre of the content. Use this to analyse which genres drive the most engagement or clickouts."
+
+      - name: show_seasons
+        description: "Total number of seasons in the show. Only populated for show-type content."
+        meta:
+          dimension:
+            type: number
+            label: "Number of Seasons"
+            groups: ["content"]
+
+      - name: content_description
+        description: "Short English synopsis of the content item from OBJECTS."
+        meta:
+          dimension:
+            type: string
+            label: "Description"
+            hidden: true
+            groups: ["content"]
+
+      - name: search_query
+        description: "Search text typed by the user. Present only on search-related events (se_category = 'search_suggest_click')."
+        meta:
+          dimension:
+            type: string
+            label: "Search Query"
+            groups: ["content"]
+
+      # ── Provider ─────────────────────────────────────────────────────────────
+      - name: provider_id
+        description: "Numeric streaming provider ID from the clickout event. Links to PACKAGES.id. NULL on non-clickout events."
+        meta:
+          dimension:
+            type: number
+            label: "Provider ID"
+            hidden: true
+            groups: ["provider"]
+
+      - name: provider_name
+        description: "Display name of the streaming provider (e.g. 'Netflix', 'Amazon Prime Video', 'Disney+'). Only populated on clickout events."
+        meta:
+          dimension:
+            type: string
+            label: "Provider"
+            groups: ["provider"]
+            ai_hint: "The streaming service the user clicked to. Only present when se_category = 'clickout'. Use this to analyse provider market share."
+          metrics:
+            unique_providers:
+              type: count_distinct
+              label: "Unique Providers Clicked"
+
+      - name: provider_slug
+        description: "Stable technical slug for the provider (e.g. 'netflix', 'amazon_prime_video', 'disney_plus'). Use this for filtering in code."
+        meta:
+          dimension:
+            type: string
+            label: "Provider Slug"
+            hidden: true
+            groups: ["provider"]
+
+      - name: provider_monetization_types
+        description: "Comma-separated monetization models offered by this provider (e.g. 'flatrate,rent,buy'). A provider can offer multiple types."
+        meta:
+          dimension:
+            type: string
+            label: "Provider Monetization"
+            groups: ["provider"]
