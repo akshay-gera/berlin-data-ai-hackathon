@@ -1,0 +1,84 @@
+chartConfig:
+  config:
+    eChartsConfig:
+      grid:
+        containLabel: true
+      legend:
+        show: true
+        type: scroll
+      series:
+        - encode:
+            xRef:
+              field: mart_user_features_primary_device
+            yRef:
+              field: mart_user_features_avg_clickout_rate
+              pivotValues:
+                - field: mart_user_features_is_logged_in_user
+                  value: 0
+          isFilteredOut: false
+          type: bar
+          yAxisIndex: 0
+        - encode:
+            xRef:
+              field: mart_user_features_primary_device
+            yRef:
+              field: mart_user_features_avg_clickout_rate
+              pivotValues:
+                - field: mart_user_features_is_logged_in_user
+                  value: 1
+          isFilteredOut: false
+          type: bar
+          yAxisIndex: 0
+      showAxisTicks: false
+      xAxis:
+        - name: Primary Device
+      yAxis:
+        - name: Average Clickout Rate
+    layout:
+      stack: false
+      xField: mart_user_features_primary_device
+      yField:
+        - mart_user_features_avg_clickout_rate
+  type: cartesian
+contentType: chart
+dashboardSlug: user-segmentation-overview-draft
+description: >-
+  Compares average clickout rate across primary device types, split by whether
+  the user has an account. This highlights which user/device combinations show
+  the strongest commercial intent.
+metricQuery:
+  additionalMetrics: []
+  customDimensions: []
+  dimensionOverrides: {}
+  dimensions:
+    - mart_user_features_primary_device
+    - mart_user_features_is_logged_in_user
+  exploreName: mart_user_features
+  filters:
+    dimensions:
+      and: []
+      id: 1cdcba32-ee07-43b8-8efe-774f76c7a99f
+    metrics:
+      and: []
+      id: 18ff5616-a94d-4d32-94d6-95aa265d51b1
+    tableCalculations:
+      and: []
+      id: 3eed11e7-60fc-4a12-b42e-020675702d9c
+  limit: 20
+  metricOverrides: {}
+  metrics:
+    - mart_user_features_avg_clickout_rate
+  sorts:
+    - descending: false
+      fieldId: mart_user_features_primary_device
+  tableCalculations: []
+name: Average Purchase Intent by Device and Account Status
+slug: average-purchase-intent-by-device-and-account-status
+spaceSlug: shared
+tableConfig:
+  columnOrder:
+    - mart_user_features_primary_device
+    - mart_user_features_is_logged_in_user
+    - mart_user_features_avg_clickout_rate
+tableName: mart_user_features
+version: 1

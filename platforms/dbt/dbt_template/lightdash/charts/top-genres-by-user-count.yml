@@ -1,0 +1,68 @@
+chartConfig:
+  config:
+    eChartsConfig:
+      grid:
+        containLabel: true
+      legend:
+        show: true
+        type: scroll
+      series:
+        - encode:
+            xRef:
+              field: mart_user_features_top_genre
+            yRef:
+              field: mart_user_features_total_users
+          isFilteredOut: false
+          name: Total Users
+          type: bar
+          yAxisIndex: 0
+      showAxisTicks: false
+      xAxis:
+        - name: Top Genre
+      yAxis:
+        - name: Total Users
+    layout:
+      flipAxes: true
+      xField: mart_user_features_top_genre
+      yField:
+        - mart_user_features_total_users
+  type: cartesian
+contentType: chart
+dashboardSlug: user-segmentation-overview-draft
+description: >-
+  Ranks the most common dominant genres across users, helping identify major
+  content-preference cohorts in the audience.
+metricQuery:
+  additionalMetrics: []
+  customDimensions: []
+  dimensionOverrides: {}
+  dimensions:
+    - mart_user_features_top_genre
+  exploreName: mart_user_features
+  filters:
+    dimensions:
+      and: []
+      id: 8906a2b2-60d2-4c22-993c-5e61035e22f5
+    metrics:
+      and: []
+      id: b8e9ee7d-23e8-4d27-9e06-89578ea07812
+    tableCalculations:
+      and: []
+      id: 3eca38be-3533-423f-b195-171d79f69dd4
+  limit: 10
+  metricOverrides: {}
+  metrics:
+    - mart_user_features_total_users
+  sorts:
+    - descending: true
+      fieldId: mart_user_features_total_users
+  tableCalculations: []
+name: Top Genres by User Count
+slug: top-genres-by-user-count
+spaceSlug: shared
+tableConfig:
+  columnOrder:
+    - mart_user_features_top_genre
+    - mart_user_features_total_users
+tableName: mart_user_features
+version: 1

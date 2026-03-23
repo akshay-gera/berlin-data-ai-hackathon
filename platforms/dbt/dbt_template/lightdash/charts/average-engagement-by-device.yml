@@ -1,0 +1,92 @@
+chartConfig:
+  config:
+    eChartsConfig:
+      grid:
+        containLabel: true
+      legend:
+        show: true
+        type: scroll
+      series:
+        - encode:
+            xRef:
+              field: mart_user_features_primary_device
+            yRef:
+              field: mart_user_features_avg_events_per_user
+          isFilteredOut: false
+          name: Avg Events per User
+          type: bar
+          yAxisIndex: 0
+        - encode:
+            xRef:
+              field: mart_user_features_primary_device
+            yRef:
+              field: mart_user_features_avg_sessions_per_user
+          isFilteredOut: false
+          name: Avg Sessions per User
+          type: bar
+          yAxisIndex: 0
+        - encode:
+            xRef:
+              field: mart_user_features_primary_device
+            yRef:
+              field: mart_user_features_avg_session_depth
+          isFilteredOut: false
+          name: Avg Session Depth
+          type: bar
+          yAxisIndex: 0
+      showAxisTicks: false
+      xAxis:
+        - name: Primary Device
+      yAxis:
+        - name: Average Engagement Metrics
+    layout:
+      stack: false
+      xField: mart_user_features_primary_device
+      yField:
+        - mart_user_features_avg_events_per_user
+        - mart_user_features_avg_sessions_per_user
+        - mart_user_features_avg_session_depth
+  type: cartesian
+contentType: chart
+dashboardSlug: user-segmentation-overview-draft
+description: >-
+  Shows how user engagement differs by primary device using average events per
+  user, average sessions per user, and average session depth.
+metricQuery:
+  additionalMetrics: []
+  customDimensions: []
+  dimensionOverrides: {}
+  dimensions:
+    - mart_user_features_primary_device
+  exploreName: mart_user_features
+  filters:
+    dimensions:
+      and: []
+      id: 7fc5cd63-2bb6-4d3c-a1b5-b7c1fa6205f9
+    metrics:
+      and: []
+      id: 62ae7f21-ebe9-43d5-93ba-8125a70e08b8
+    tableCalculations:
+      and: []
+      id: 65bf29e5-8c9c-4750-9452-298839fabee0
+  limit: 10
+  metricOverrides: {}
+  metrics:
+    - mart_user_features_avg_events_per_user
+    - mart_user_features_avg_sessions_per_user
+    - mart_user_features_avg_session_depth
+  sorts:
+    - descending: false
+      fieldId: mart_user_features_primary_device
+  tableCalculations: []
+name: Average Engagement by Device
+slug: average-engagement-by-device
+spaceSlug: shared
+tableConfig:
+  columnOrder:
+    - mart_user_features_primary_device
+    - mart_user_features_avg_events_per_user
+    - mart_user_features_avg_sessions_per_user
+    - mart_user_features_avg_session_depth
+tableName: mart_user_features
+version: 1

@@ -1,0 +1,39 @@
+chartConfig:
+  config:
+    label: Avg Sessions / User
+    selectedField: mart_user_features_avg_sessions_per_user
+    showBigNumberLabel: true
+  type: big_number
+contentType: chart
+dashboardSlug: user-segmentation-overview-draft
+description: Average number of sessions per user — a measure of visit frequency.
+metricQuery:
+  additionalMetrics: []
+  customDimensions: []
+  dimensionOverrides: {}
+  dimensions: []
+  exploreName: mart_user_features
+  filters:
+    dimensions:
+      and: []
+      id: 7d3ac53a-6f42-411f-8581-a7d826fdedee
+    metrics:
+      and: []
+      id: ac3ab160-bb49-44e6-a07d-49150c641a08
+    tableCalculations:
+      and: []
+      id: e336c351-7a72-4a72-b549-d44916fce342
+  limit: 1
+  metricOverrides: {}
+  metrics:
+    - mart_user_features_avg_sessions_per_user
+  sorts: []
+  tableCalculations: []
+name: Avg Sessions per User
+slug: kpi-avg-sessions
+spaceSlug: shared
+tableConfig:
+  columnOrder:
+    - mart_user_features_avg_sessions_per_user
+tableName: mart_user_features
+version: 1

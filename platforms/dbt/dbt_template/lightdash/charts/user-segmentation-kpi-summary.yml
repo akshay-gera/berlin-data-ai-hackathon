@@ -1,0 +1,58 @@
+chartConfig:
+  config:
+    columns: {}
+    conditionalFormattings: []
+    hideRowNumbers: false
+    metricsAsRows: false
+    showColumnCalculation: false
+    showResultsTotal: false
+    showRowCalculation: false
+    showSubtotals: false
+    showTableNames: true
+  type: table
+contentType: chart
+dashboardSlug: user-segmentation-overview-draft
+description: >-
+  Top-level summary of the user base, including total users, average clickout
+  rate, average events per user, average sessions per user, average titles
+  viewed per user, and share of users with an account.
+metricQuery:
+  additionalMetrics: []
+  customDimensions: []
+  dimensionOverrides: {}
+  dimensions: []
+  exploreName: mart_user_features
+  filters:
+    dimensions:
+      and: []
+      id: bbafcf51-c5dc-49f2-806e-bee7e6c18ca0
+    metrics:
+      and: []
+      id: 86f4daee-066c-44c6-bc57-1265f950952e
+    tableCalculations:
+      and: []
+      id: 84dfcf48-08b5-4ea2-9857-b45b59c01084
+  limit: 1
+  metricOverrides: {}
+  metrics:
+    - mart_user_features_total_users
+    - mart_user_features_avg_clickout_rate
+    - mart_user_features_avg_events_per_user
+    - mart_user_features_avg_sessions_per_user
+    - mart_user_features_avg_titles_per_user
+    - mart_user_features_pct_logged_in
+  sorts: []
+  tableCalculations: []
+name: User Segmentation KPI Summary
+slug: user-segmentation-kpi-summary
+spaceSlug: shared
+tableConfig:
+  columnOrder:
+    - mart_user_features_total_users
+    - mart_user_features_avg_clickout_rate
+    - mart_user_features_avg_events_per_user
+    - mart_user_features_avg_sessions_per_user
+    - mart_user_features_avg_titles_per_user
+    - mart_user_features_pct_logged_in
+tableName: mart_user_features
+version: 1

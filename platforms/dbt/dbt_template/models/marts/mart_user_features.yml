@@ -349,6 +349,11 @@ models:
             type: number
             label: "Seenlist Adds"
             groups: ["curation"]
+          metrics:
+            avg_seenlist_adds:
+              type: average
+              label: "Avg Seenlist Adds"
+              round: 2
 
       - name: likelist_adds
         description: "Number of times this user explicitly liked a title. Positive sentiment signal."
@@ -357,6 +362,11 @@ models:
             type: number
             label: "Likes"
             groups: ["curation"]
+          metrics:
+            avg_likelist_adds:
+              type: average
+              label: "Avg Likes"
+              round: 2
 
       - name: dislikelist_adds
         description: "Number of times this user explicitly disliked a title. Negative preference signal."

@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "charts": {
+    "genre-segment-detail-table": "2026-03-23T12:32:32.921Z",
+    "user-segmentation-kpi-summary": "2026-03-23T12:26:58.291Z",
+    "average-purchase-intent-by-device-and-account-status": "2026-03-23T12:32:32.921Z",
+    "top-genres-by-user-count": "2026-03-23T12:32:32.921Z",
+    "average-engagement-by-device": "2026-03-23T12:32:32.921Z",
+    "commercial-intent-mix-by-top-provider": "2026-03-23T12:32:32.921Z",
+    "curation-behaviour-by-genre": "2026-03-23T12:32:32.921Z",
+    "kpi-avg-clickout-rate": "2026-03-23T12:32:32.921Z",
+    "kpi-avg-sessions": "2026-03-23T12:32:32.921Z",
+    "kpi-pct-with-account": "2026-03-23T12:32:32.921Z",
+    "kpi-total-users": "2026-03-23T12:32:32.921Z",
+    "movie-vs-show-by-device": "2026-03-23T12:32:32.921Z"
+  },
+  "dashboards": {
+    "user-segmentation-overview-draft": "2026-03-23T12:26:58.697Z",
+    "audience-segmentation-challenge-5": "2026-03-23T12:32:32.673Z"
+  }
+}

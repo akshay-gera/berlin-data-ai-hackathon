@@ -37,6 +37,8 @@ models:
     base:
       +materialized: view
       +schema: base
+      +meta:
+        hidden: true
     marts:
       +materialized: table
       +schema: marts

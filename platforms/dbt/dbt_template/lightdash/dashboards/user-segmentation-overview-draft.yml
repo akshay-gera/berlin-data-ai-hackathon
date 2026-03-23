@@ -1,0 +1,88 @@
+contentType: dashboard
+description: >-
+  Executive dashboard for behavioral user segmentation in Germany during
+  December 2025. It focuses on the strongest available segmentation signals in
+  the user-level dataset: purchase intent, engagement depth, loyalty/frequency,
+  content preference, and account status.
+filters:
+  dimensions: []
+  metrics: []
+  tableCalculations: []
+name: User Segmentation Overview Draft
+slug: user-segmentation-overview-draft
+spaceSlug: shared
+tabs: []
+tiles:
+  - h: 9
+    properties:
+      chartName: User Segmentation KPI Summary
+      chartSlug: user-segmentation-kpi-summary
+      hideTitle: false
+      title: ""
+    tabUuid: null
+    tileSlug: user-segmentation-kpi-summary
+    type: saved_chart
+    w: 18
+    x: 0
+    "y": 0
+  - h: 9
+    properties:
+      chartName: Average Purchase Intent by Device and Account Status
+      chartSlug: average-purchase-intent-by-device-and-account-status
+      hideTitle: false
+      title: ""
+    tabUuid: null
+    tileSlug: average-purchase-intent-by-device-and-account-status
+    type: saved_chart
+    w: 18
+    x: 18
+    "y": 0
+  - h: 9
+    properties:
+      chartName: Average Engagement by Device
+      chartSlug: average-engagement-by-device
+      hideTitle: false
+      title: ""
+    tabUuid: null
+    tileSlug: average-engagement-by-device
+    type: saved_chart
+    w: 18
+    x: 0
+    "y": 9
+  - h: 9
+    properties:
+      chartName: Top Genres by User Count
+      chartSlug: top-genres-by-user-count
+      hideTitle: false
+      title: ""
+    tabUuid: null
+    tileSlug: top-genres-by-user-count
+    type: saved_chart
+    w: 18
+    x: 18
+    "y": 9
+  - h: 9
+    properties:
+      chartName: Commercial Intent Mix by Top Provider
+      chartSlug: commercial-intent-mix-by-top-provider
+      hideTitle: false
+      title: ""
+    tabUuid: null
+    tileSlug: commercial-intent-mix-by-top-provider
+    type: saved_chart
+    w: 18
+    x: 0
+    "y": 18
+  - h: 9
+    properties:
+      chartName: Genre Segment Detail Table
+      chartSlug: genre-segment-detail-table
+      hideTitle: false
+      title: ""
+    tabUuid: null
+    tileSlug: genre-segment-detail-table
+    type: saved_chart
+    w: 18
+    x: 18
+    "y": 18
+version: 1

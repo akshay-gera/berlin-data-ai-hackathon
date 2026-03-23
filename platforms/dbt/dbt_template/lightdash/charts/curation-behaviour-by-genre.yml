@@ -1,0 +1,91 @@
+chartConfig:
+  config:
+    eChartsConfig:
+      grid:
+        containLabel: true
+      legend:
+        show: true
+        type: scroll
+      series:
+        - encode:
+            xRef:
+              field: mart_user_features_top_genre
+            yRef:
+              field: mart_user_features_avg_watchlist_adds
+          name: Avg Watchlist Adds
+          type: bar
+        - encode:
+            xRef:
+              field: mart_user_features_top_genre
+            yRef:
+              field: mart_user_features_avg_seenlist_adds
+          name: Avg Seenlist Adds
+          type: bar
+        - encode:
+            xRef:
+              field: mart_user_features_top_genre
+            yRef:
+              field: mart_user_features_avg_likelist_adds
+          name: Avg Likes
+          type: bar
+      xAxis:
+        - name: Avg Actions per User
+      yAxis:
+        - name: Top Genre
+    layout:
+      flipAxes: true
+      xField: mart_user_features_top_genre
+      yField:
+        - mart_user_features_avg_watchlist_adds
+        - mart_user_features_avg_seenlist_adds
+        - mart_user_features_avg_likelist_adds
+  type: cartesian
+contentType: chart
+dashboardSlug: user-segmentation-overview-draft
+description: >-
+  Shows average watchlist adds, seenlist adds, and likes per user broken down by
+  top genre. Identifies which genre audiences are most active curators — useful
+  for understanding which content categories drive the deepest intent signals.
+metricQuery:
+  additionalMetrics: []
+  customDimensions: []
+  dimensionOverrides: {}
+  dimensions:
+    - mart_user_features_top_genre
+  exploreName: mart_user_features
+  filters:
+    dimensions:
+      and:
+        - id: daabce54-c8df-4be5-9cf4-f56fd448a0b5
+          operator: notNull
+          target:
+            fieldId: mart_user_features_top_genre
+          values: []
+      id: 964ad512-1011-454e-817b-d903007c4cf3
+    metrics:
+      and: []
+      id: 74d81f6d-5537-4e36-9da6-de54c878a4b1
+    tableCalculations:
+      and: []
+      id: 83b46ee4-3a60-4c6c-80f2-cc880df0d161
+  limit: 15
+  metricOverrides: {}
+  metrics:
+    - mart_user_features_avg_watchlist_adds
+    - mart_user_features_avg_seenlist_adds
+    - mart_user_features_avg_likelist_adds
+  sorts:
+    - descending: true
+      fieldId: mart_user_features_avg_watchlist_adds
+  tableCalculations: []
+name: Curation Behaviour by Genre
+slug: curation-behaviour-by-genre
+spaceSlug: shared
+tableConfig:
+  columnOrder:
+    - mart_user_features_top_genre
+    - mart_user_features_avg_watchlist_adds
+    - mart_user_features_avg_seenlist_adds
+    - mart_user_features_avg_likelist_adds
+tableName: mart_user_features
+version: 1

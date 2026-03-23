@@ -1,0 +1,149 @@
+contentType: dashboard
+description: >-
+  Audience segmentation dashboard for Challenge 5. Covers Germany, December
+  2025. Breaks down the JustWatch user base by purchase intent, content
+  preference, engagement depth, device type, and curation behaviour — the
+  signals needed to define and name audience segments for targeted campaign
+  planning.
+filters:
+  dimensions: []
+  metrics: []
+  tableCalculations: []
+name: Audience Segmentation — Challenge 5
+slug: audience-segmentation-challenge-5
+spaceSlug: shared
+tabs: []
+tiles:
+  - h: 4
+    properties:
+      chartName: Total Users
+      chartSlug: kpi-total-users
+      hideTitle: false
+      title: Total Users
+    tabUuid: null
+    tileSlug: kpi-total-users
+    type: saved_chart
+    w: 9
+    x: 0
+    "y": 0
+  - h: 4
+    properties:
+      chartName: Avg Clickout Rate
+      chartSlug: kpi-avg-clickout-rate
+      hideTitle: false
+      title: Avg Clickout Rate
+    tabUuid: null
+    tileSlug: kpi-avg-clickout-rate
+    type: saved_chart
+    w: 9
+    x: 9
+    "y": 0
+  - h: 4
+    properties:
+      chartName: "% Users With Account"
+      chartSlug: kpi-pct-with-account
+      hideTitle: false
+      title: "% With Account"
+    tabUuid: null
+    tileSlug: kpi-pct-with-account
+    type: saved_chart
+    w: 9
+    x: 18
+    "y": 0
+  - h: 4
+    properties:
+      chartName: Avg Sessions per User
+      chartSlug: kpi-avg-sessions
+      hideTitle: false
+      title: Avg Sessions / User
+    tabUuid: null
+    tileSlug: kpi-avg-sessions
+    type: saved_chart
+    w: 9
+    x: 27
+    "y": 0
+  - h: 9
+    properties:
+      chartName: Average Purchase Intent by Device and Account Status
+      chartSlug: average-purchase-intent-by-device-and-account-status
+      hideTitle: false
+      title: Purchase Intent by Device & Account Status
+    tabUuid: null
+    tileSlug: average-purchase-intent-by-device-and-account-status
+    type: saved_chart
+    w: 18
+    x: 0
+    "y": 4
+  - h: 9
+    properties:
+      chartName: Top Genres by User Count
+      chartSlug: top-genres-by-user-count
+      hideTitle: false
+      title: Top Genres by User Count
+    tabUuid: null
+    tileSlug: top-genres-by-user-count
+    type: saved_chart
+    w: 18
+    x: 18
+    "y": 4
+  - h: 9
+    properties:
+      chartName: Average Engagement by Device
+      chartSlug: average-engagement-by-device
+      hideTitle: false
+      title: Engagement Depth by Device
+    tabUuid: null
+    tileSlug: average-engagement-by-device
+    type: saved_chart
+    w: 18
+    x: 0
+    "y": 13
+  - h: 9
+    properties:
+      chartName: Movie vs Show Preference by Device
+      chartSlug: movie-vs-show-by-device
+      hideTitle: false
+      title: Movie vs Show Preference by Device
+    tabUuid: null
+    tileSlug: movie-vs-show-by-device
+    type: saved_chart
+    w: 18
+    x: 18
+    "y": 13
+  - h: 9
+    properties:
+      chartName: Commercial Intent Mix by Top Provider
+      chartSlug: commercial-intent-mix-by-top-provider
+      hideTitle: false
+      title: Commercial Intent Mix by Top Provider
+    tabUuid: null
+    tileSlug: commercial-intent-mix-by-top-provider
+    type: saved_chart
+    w: 18
+    x: 0
+    "y": 22
+  - h: 9
+    properties:
+      chartName: Curation Behaviour by Genre
+      chartSlug: curation-behaviour-by-genre
+      hideTitle: false
+      title: Curation Behaviour by Genre
+    tabUuid: null
+    tileSlug: curation-behaviour-by-genre
+    type: saved_chart
+    w: 18
+    x: 18
+    "y": 22
+  - h: 10
+    properties:
+      chartName: Genre Segment Detail Table
+      chartSlug: genre-segment-detail-table
+      hideTitle: false
+      title: Genre Segment Detail
+    tabUuid: null
+    tileSlug: genre-segment-detail-table
+    type: saved_chart
+    w: 36
+    x: 0
+    "y": 31
+version: 1

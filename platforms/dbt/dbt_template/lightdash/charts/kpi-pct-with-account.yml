@@ -1,0 +1,41 @@
+chartConfig:
+  config:
+    label: "% With Account"
+    selectedField: mart_user_features_pct_logged_in
+    showBigNumberLabel: true
+  type: big_number
+contentType: chart
+dashboardSlug: user-segmentation-overview-draft
+description: >-
+  Share of users who were logged into a JustWatch account at least once during
+  December 2025.
+metricQuery:
+  additionalMetrics: []
+  customDimensions: []
+  dimensionOverrides: {}
+  dimensions: []
+  exploreName: mart_user_features
+  filters:
+    dimensions:
+      and: []
+      id: 698e31af-9a66-4ef5-a8e9-c289f0ddd5bd
+    metrics:
+      and: []
+      id: a34e568c-7166-45f2-82af-ab061b93932f
+    tableCalculations:
+      and: []
+      id: d69b846f-49eb-41f3-89fb-e43ddeedb0d2
+  limit: 1
+  metricOverrides: {}
+  metrics:
+    - mart_user_features_pct_logged_in
+  sorts: []
+  tableCalculations: []
+name: "% Users With Account"
+slug: kpi-pct-with-account
+spaceSlug: shared
+tableConfig:
+  columnOrder:
+    - mart_user_features_pct_logged_in
+tableName: mart_user_features
+version: 1

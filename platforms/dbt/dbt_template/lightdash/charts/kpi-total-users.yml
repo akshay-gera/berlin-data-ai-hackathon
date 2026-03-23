@@ -1,0 +1,40 @@
+chartConfig:
+  config:
+    label: Total Users
+    selectedField: mart_user_features_total_users
+    showBigNumberLabel: true
+    style: K
+  type: big_number
+contentType: chart
+dashboardSlug: user-segmentation-overview-draft
+description: Total number of distinct anonymous users in Germany, December 2025.
+metricQuery:
+  additionalMetrics: []
+  customDimensions: []
+  dimensionOverrides: {}
+  dimensions: []
+  exploreName: mart_user_features
+  filters:
+    dimensions:
+      and: []
+      id: 83d7c899-9ff0-4e75-9ba9-3c55f16f6d33
+    metrics:
+      and: []
+      id: 5199a6e1-f844-49a4-a047-c4e701fa7c71
+    tableCalculations:
+      and: []
+      id: 4628e215-a88b-41a2-aaa8-99916f6af9b8
+  limit: 1
+  metricOverrides: {}
+  metrics:
+    - mart_user_features_total_users
+  sorts: []
+  tableCalculations: []
+name: Total Users
+slug: kpi-total-users
+spaceSlug: shared
+tableConfig:
+  columnOrder:
+    - mart_user_features_total_users
+tableName: mart_user_features
+version: 1

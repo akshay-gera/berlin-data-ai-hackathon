@@ -1,0 +1,41 @@
+chartConfig:
+  config:
+    label: Avg Clickout Rate
+    selectedField: mart_user_features_avg_clickout_rate
+    showBigNumberLabel: true
+  type: big_number
+contentType: chart
+dashboardSlug: user-segmentation-overview-draft
+description: >-
+  Average fraction of events that are clickouts — the key purchase intent
+  signal.
+metricQuery:
+  additionalMetrics: []
+  customDimensions: []
+  dimensionOverrides: {}
+  dimensions: []
+  exploreName: mart_user_features
+  filters:
+    dimensions:
+      and: []
+      id: feaebb29-1884-432a-a179-0d0b40b98132
+    metrics:
+      and: []
+      id: f4653658-98c8-4953-a6ae-5f65bbf9f226
+    tableCalculations:
+      and: []
+      id: b3177f2c-db3e-4e8e-9e84-aa833c5b0a34
+  limit: 1
+  metricOverrides: {}
+  metrics:
+    - mart_user_features_avg_clickout_rate
+  sorts: []
+  tableCalculations: []
+name: Avg Clickout Rate
+slug: kpi-avg-clickout-rate
+spaceSlug: shared
+tableConfig:
+  columnOrder:
+    - mart_user_features_avg_clickout_rate
+tableName: mart_user_features
+version: 1

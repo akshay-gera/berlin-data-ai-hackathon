@@ -1,0 +1,60 @@
+chartConfig:
+  config:
+    columns: {}
+    conditionalFormattings: []
+    hideRowNumbers: false
+    metricsAsRows: false
+    showColumnCalculation: false
+    showResultsTotal: false
+    showRowCalculation: false
+    showSubtotals: false
+    showTableNames: true
+  type: table
+contentType: chart
+dashboardSlug: user-segmentation-overview-draft
+description: >-
+  Detailed comparison of dominant user genres using user count, average clickout
+  rate, average session depth, average days active, and share of users with an
+  account.
+metricQuery:
+  additionalMetrics: []
+  customDimensions: []
+  dimensionOverrides: {}
+  dimensions:
+    - mart_user_features_top_genre
+  exploreName: mart_user_features
+  filters:
+    dimensions:
+      and: []
+      id: e00669b5-8859-4a46-a722-775ccd842442
+    metrics:
+      and: []
+      id: 88ac7fd3-d133-4b37-80f0-00a3c4ac0403
+    tableCalculations:
+      and: []
+      id: e2bc8939-fa54-4cd5-87f9-f70b938103f5
+  limit: 15
+  metricOverrides: {}
+  metrics:
+    - mart_user_features_total_users
+    - mart_user_features_avg_clickout_rate
+    - mart_user_features_avg_session_depth
+    - mart_user_features_avg_days_active
+    - mart_user_features_pct_logged_in
+  sorts:
+    - descending: true
+      fieldId: mart_user_features_total_users
+  tableCalculations: []
+name: Genre Segment Detail Table
+slug: genre-segment-detail-table
+spaceSlug: shared
+tableConfig:
+  columnOrder:
+    - mart_user_features_top_genre
+    - mart_user_features_total_users
+    - mart_user_features_avg_clickout_rate
+    - mart_user_features_avg_session_depth
+    - mart_user_features_avg_days_active
+    - mart_user_features_pct_logged_in
+tableName: mart_user_features
+version: 1

@@ -1,0 +1,70 @@
+chartConfig:
+  config:
+    eChartsConfig:
+      grid:
+        containLabel: true
+      legend:
+        show: false
+      series:
+        - encode:
+            xRef:
+              field: mart_user_features_primary_device
+            yRef:
+              field: mart_user_features_avg_movie_share
+          name: Avg Movie Share
+          type: bar
+      xAxis:
+        - name: Primary Device
+      yAxis:
+        - name: Avg Movie Share (0 = all shows, 1 = all movies)
+    layout:
+      xField: mart_user_features_primary_device
+      yField:
+        - mart_user_features_avg_movie_share
+  type: cartesian
+contentType: chart
+dashboardSlug: user-segmentation-overview-draft
+description: >-
+  Average movie share (fraction of content events on movies vs shows) broken
+  down by primary device. Reveals whether mobile users skew toward movies and
+  desktop users toward shows, or vice versa — a signal for content targeting by
+  device channel.
+metricQuery:
+  additionalMetrics: []
+  customDimensions: []
+  dimensionOverrides: {}
+  dimensions:
+    - mart_user_features_primary_device
+  exploreName: mart_user_features
+  filters:
+    dimensions:
+      and:
+        - id: a2c79391-cc54-491a-b38c-2d078afc7590
+          operator: notNull
+          target:
+            fieldId: mart_user_features_primary_device
+          values: []
+      id: c5c9dddc-8b8f-403f-9589-e87616fd2916
+    metrics:
+      and: []
+      id: 7cb79c9a-922c-451f-b82a-438c8e86b263
+    tableCalculations:
+      and: []
+      id: 5deefa6c-70a0-463e-99e7-2a86923f0c8f
+  limit: 10
+  metricOverrides: {}
+  metrics:
+    - mart_user_features_avg_movie_share
+  sorts:
+    - descending: false
+      fieldId: mart_user_features_primary_device
+  tableCalculations: []
+name: Movie vs Show Preference by Device
+slug: movie-vs-show-by-device
+spaceSlug: shared
+tableConfig:
+  columnOrder:
+    - mart_user_features_primary_device
+    - mart_user_features_avg_movie_share
+tableName: mart_user_features
+version: 1

@@ -1,0 +1,98 @@
+chartConfig:
+  config:
+    eChartsConfig:
+      grid:
+        containLabel: true
+      legend:
+        show: true
+        type: scroll
+      series:
+        - encode:
+            xRef:
+              field: mart_user_features_top_provider
+            yRef:
+              field: mart_user_features_avg_flatrate_clickouts
+          isFilteredOut: false
+          name: Avg Subscription Clickouts
+          type: bar
+          yAxisIndex: 0
+        - encode:
+            xRef:
+              field: mart_user_features_top_provider
+            yRef:
+              field: mart_user_features_avg_rent_clickouts
+          isFilteredOut: false
+          name: Avg Rental Clickouts
+          type: bar
+          yAxisIndex: 0
+        - encode:
+            xRef:
+              field: mart_user_features_top_provider
+            yRef:
+              field: mart_user_features_avg_clickouts_per_user
+          isFilteredOut: false
+          name: Avg Clickouts per User
+          type: bar
+          yAxisIndex: 0
+      showAxisTicks: false
+      xAxis:
+        - name: Top Provider
+      yAxis:
+        - name: Average Clickouts per User
+    layout:
+      flipAxes: true
+      xField: mart_user_features_top_provider
+      yField:
+        - mart_user_features_avg_flatrate_clickouts
+        - mart_user_features_avg_rent_clickouts
+        - mart_user_features_avg_clickouts_per_user
+  type: cartesian
+contentType: chart
+dashboardSlug: user-segmentation-overview-draft
+description: >-
+  Compares the average mix of subscription, rental, and purchase clickouts among
+  users whose dominant provider is each service. This helps distinguish
+  subscription-oriented versus transactional audiences.
+metricQuery:
+  additionalMetrics: []
+  customDimensions: []
+  dimensionOverrides: {}
+  dimensions:
+    - mart_user_features_top_provider
+  exploreName: mart_user_features
+  filters:
+    dimensions:
+      and:
+        - id: 09de6a6d-d614-47a5-8423-bcd132e9bdff
+          operator: notNull
+          target:
+            fieldId: mart_user_features_top_provider
+          values: []
+      id: fe09e679-20bb-43f7-9ff8-6ddf81f3a7a3
+    metrics:
+      and: []
+      id: 715fe9b9-55b4-4867-b9b0-b0a51507a780
+    tableCalculations:
+      and: []
+      id: 368a9d80-2854-4aaf-b162-147d0f115207
+  limit: 10
+  metricOverrides: {}
+  metrics:
+    - mart_user_features_avg_flatrate_clickouts
+    - mart_user_features_avg_rent_clickouts
+    - mart_user_features_avg_clickouts_per_user
+  sorts:
+    - descending: true
+      fieldId: mart_user_features_avg_clickouts_per_user
+  tableCalculations: []
+name: Commercial Intent Mix by Top Provider
+slug: commercial-intent-mix-by-top-provider
+spaceSlug: shared
+tableConfig:
+  columnOrder:
+    - mart_user_features_top_provider
+    - mart_user_features_avg_flatrate_clickouts
+    - mart_user_features_avg_rent_clickouts
+    - mart_user_features_avg_clickouts_per_user
+tableName: mart_user_features
+version: 1
