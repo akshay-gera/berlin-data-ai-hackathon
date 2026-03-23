@@ -20,11 +20,6 @@ models:
         - "movie_share near 1.0 = this user almost exclusively watches movies. Near 0.0 = show-first user."
         - "is_logged_in_user = 1 means the user has a JustWatch account. These users tend to be more engaged and have richer profiles."
         - "top_genre, top_provider, and primary_device are the most frequent values for that user across their entire history."
-      spotlight:
-        visibility: "show"
-        categories:
-          - "Segmentation"
-          - "User Analysis"
       group_details:
         identity:
           label: "Identity & Preferences"

@@ -1,0 +1,29 @@
+version: 2
+
+# Base models are internal staging layers — hide them from Lightdash.
+# All exploration happens via the marts layer (mart_events_wide, mart_user_features).
+
+models:
+  - name: base_events_t1
+    meta:
+      hidden: true
+
+  - name: base_events_t2
+    meta:
+      hidden: true
+
+  - name: base_events_t3
+    meta:
+      hidden: true
+
+  - name: base_events_t4
+    meta:
+      hidden: true
+
+  - name: base_objects
+    meta:
+      hidden: true
+
+  - name: base_packages
+    meta:
+      hidden: true

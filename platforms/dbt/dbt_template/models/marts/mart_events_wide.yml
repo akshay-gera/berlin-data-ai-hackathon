@@ -24,11 +24,6 @@ models:
         - "user_id is anonymous. login_id is only present (~14% of events) when the user is logged into their JustWatch account."
         - "To count events use count(rid). To count users use count_distinct(user_id). To count clickouts filter se_category = 'clickout'."
         - "Bot traffic has already been removed. No need to filter device_class."
-      spotlight:
-        visibility: "show"
-        categories:
-          - "Explore"
-          - "Raw Data"
       group_details:
         identity:
           label: "Identity & Session"
