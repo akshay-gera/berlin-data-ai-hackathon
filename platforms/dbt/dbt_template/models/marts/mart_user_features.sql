@@ -117,7 +117,23 @@ select
     d.primary_device,
     prov.top_provider,
     g.top_genre,
-    l.primary_locale
+    l.primary_locale,
+
+    -- Loyalty tier: how many days was this user active?
+    case
+        when b.days_active = 1               then '1. One-off (1 day)'
+        when b.days_active between 2 and 4   then '2. Occasional (2–4 days)'
+        when b.days_active between 5 and 14  then '3. Regular (5–14 days)'
+        when b.days_active >= 15             then '4. Loyal (15+ days)'
+    end                                                                         as days_active_tier,
+
+    -- Purchase intent tier: what fraction of events were clickouts?
+    case
+        when b.total_clickouts = 0           then '1. Browser (0 clickouts)'
+        when b.clickout_rate < 0.02          then '2. Low intent (<2%)'
+        when b.clickout_rate < 0.10          then '3. Medium intent (2–10%)'
+        else                                      '4. High intent (10%+)'
+    end                                                                         as clickout_tier
 
 from base_agg b
 left join top_device   d    using (user_id)

@@ -5,3 +5,4 @@
 logs/
 *.log
 platforms/dbt/dbt_template/target
+platforms/dbt/dbt_template/lightdash

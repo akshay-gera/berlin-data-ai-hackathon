@@ -376,6 +376,41 @@ models:
             label: "Dislikes"
             groups: ["curation"]
 
+      # ── Segment Tiers ────────────────────────────────────────────────────────
+      - name: days_active_tier
+        description: >
+          Loyalty tier based on number of distinct active days in December 2025.
+          '1. One-off (1 day)' / '2. Occasional (2–4 days)' / '3. Regular (5–14 days)' / '4. Loyal (15+ days)'.
+          Prefixed with a number so tiers sort correctly in charts.
+        meta:
+          dimension:
+            type: string
+            label: "Loyalty Tier"
+            groups: ["identity"]
+            ai_hint: "Use this to size loyalty cohorts. Most users will be One-off or Occasional. Loyal users (15+ days) are the high-value core audience."
+          metrics:
+            users_by_loyalty_tier:
+              type: count_distinct
+              sql: "${user_id}"
+              label: "Users (by Loyalty Tier)"
+
+      - name: clickout_tier
+        description: >
+          Purchase intent tier based on clickout_rate.
+          '1. Browser (0 clickouts)' / '2. Low intent (<2%)' / '3. Medium intent (2–10%)' / '4. High intent (10%+)'.
+          Prefixed with a number so tiers sort correctly in charts.
+        meta:
+          dimension:
+            type: string
+            label: "Intent Tier"
+            groups: ["clickouts"]
+            ai_hint: "The majority of users will be Browsers with zero clickouts. High intent users (10%+) are the commercially most valuable segment — focus B2B pitches on them."
+          metrics:
+            users_by_intent_tier:
+              type: count_distinct
+              sql: "${user_id}"
+              label: "Users (by Intent Tier)"
+
       # ── Recency ──────────────────────────────────────────────────────────────
       - name: last_active_date
         description: "Most recent calendar date this user had any event. Indicates recency within the December 2025 period."

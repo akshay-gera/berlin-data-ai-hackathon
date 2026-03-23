@@ -134,6 +134,61 @@ tiles:
     w: 18
     x: 18
     "y": 22
+  # ── Row 31: Segment sizing — loyalty + intent tiers ─────────────────────
+  - h: 9
+    properties:
+      chartName: Users by Loyalty Tier
+      chartSlug: users-by-loyalty-tier
+      hideTitle: false
+      title: Users by Loyalty Tier
+    tabUuid: null
+    tileSlug: users-by-loyalty-tier
+    type: saved_chart
+    w: 18
+    x: 0
+    "y": 31
+
+  - h: 9
+    properties:
+      chartName: Users by Intent Tier
+      chartSlug: users-by-intent-tier
+      hideTitle: false
+      title: Users by Intent Tier
+    tabUuid: null
+    tileSlug: users-by-intent-tier
+    type: saved_chart
+    w: 18
+    x: 18
+    "y": 31
+
+  # ── Row 40: Genre intent + account vs guest ───────────────────────────────
+  - h: 9
+    properties:
+      chartName: Avg Clickout Rate by Genre
+      chartSlug: avg-clickout-rate-by-genre
+      hideTitle: false
+      title: Avg Clickout Rate by Genre
+    tabUuid: null
+    tileSlug: avg-clickout-rate-by-genre
+    type: saved_chart
+    w: 18
+    x: 0
+    "y": 40
+
+  - h: 9
+    properties:
+      chartName: "Account Holders vs Guests: Engagement Profile"
+      chartSlug: account-vs-guest-profile
+      hideTitle: false
+      title: "Account Holders vs Guests: Engagement Profile"
+    tabUuid: null
+    tileSlug: account-vs-guest-profile
+    type: saved_chart
+    w: 18
+    x: 18
+    "y": 40
+
+  # ── Row 49: Genre detail table (full width) ───────────────────────────────
   - h: 10
     properties:
       chartName: Genre Segment Detail Table
@@ -145,5 +200,5 @@ tiles:
     type: saved_chart
     w: 36
     x: 0
-    "y": 31
+    "y": 49
 version: 1
