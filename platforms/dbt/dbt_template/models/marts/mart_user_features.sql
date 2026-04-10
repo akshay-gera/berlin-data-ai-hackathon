@@ -133,10 +133,13 @@ select
         when b.clickout_rate < 0.02          then '2. Low intent (<2%)'
         when b.clickout_rate < 0.10          then '3. Medium intent (2–10%)'
         else                                      '4. High intent (10%+)'
-    end                                                                         as clickout_tier
+    end                                                                                      as clickout_tier,
+    u.primary_segment
 
 from base_agg b
 left join top_device   d    using (user_id)
 left join top_provider prov using (user_id)
 left join top_genre    g    using (user_id)
 left join top_locale   l    using (user_id)
+left join {{ source('external_transformations', 'user_segments_v5')}} u
+    on b.user_id =  u.user_id

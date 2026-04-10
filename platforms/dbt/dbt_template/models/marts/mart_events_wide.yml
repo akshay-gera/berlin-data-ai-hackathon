@@ -457,3 +457,13 @@ models:
             type: string
             label: "Provider Monetization"
             groups: ["provider"]
+
+      # ── Segmentation ─────────────────────────────────────────────────────────
+      - name: primary_segment
+        description: "User's primary segment label derived from the user segmentation model (user_segments_v5). NULL if the user was not matched in the segmentation table."
+        meta:
+          dimension:
+            type: string
+            label: "Primary Segment"
+            groups: ["identity"]
+            ai_hint: "The user's assigned segment from the segmentation model. Use this to filter or group events by audience segment."

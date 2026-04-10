@@ -75,6 +75,15 @@ models:
             label: "Primary Locale"
             groups: ["identity"]
 
+      - name: primary_segment
+        description: "User's primary segment label derived from the user segmentation model (user_segments_v5). NULL if the user was not matched in the segmentation table."
+        meta:
+          dimension:
+            type: string
+            label: "Primary Segment"
+            groups: ["identity"]
+            ai_hint: "The user's assigned segment from the segmentation model. Use this to group and compare user cohorts by segment."
+
       - name: primary_device
         description: "Device class this user used most frequently: 'Desktop', 'Phone', or 'Tablet'."
         meta:

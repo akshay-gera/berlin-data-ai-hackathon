@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: external_transformations
+    description: >
+      JustWatch anonymized behavioral and content data for the Berlin Data & AI Hackathon.
+      All tables live in the read-only DB_JW_SHARED.CHALLENGE schema shared across all teams.
+    database: DB_TEAM_2
+    schema: BASE_MARTS
+    tables:
+      - name: user_segments_v5
+        description: "The table contains records of user segments, categorizing users based on their behavior and preferences. Each record represents a user and includes details about their primary and secondary segments, as well as various scores and ratios related to their behavior."

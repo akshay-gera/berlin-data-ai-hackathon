@@ -63,7 +63,8 @@ select
     o.imdb_score,
     o.genre_tmdb[0]::text                           as primary_genre,
     o.seasons                                       as show_seasons,
-    o.short_description                             as content_description
+    o.short_description                             as content_description,
+    u.primary_segment
 
 from {{ ref('base_events_t1') }} e
 
@@ -72,7 +73,8 @@ left join {{ source('jw_shared', 'OBJECTS') }} o
 
 left join {{ source('jw_shared', 'PACKAGES') }} p
     on e.cc_clickout:providerId::number = p.id
-
+left join {{ source('external_transformations', 'user_segments_v5') }} u
+    on e.user_id = u.user_id
 where
     e.cc_yauaa:deviceClass::text not in ('Robot', 'Spy', 'Hacker')
 
